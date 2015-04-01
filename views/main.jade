@@ -5,58 +5,23 @@ block content
     header
       ul.nav.nav-tabs
         each code, target in output
-          - var clients = (typeof code === 'string') ? false : Object.keys(code)
-
-          if (!clients)
-            li: a(href='##{target}', data-toggle='tab')= namedTargets[target].title
-
-          else if (clients.length === 1)
-            li: a(href='##{target}-#{clients[0]}', data-toggle='tab')= namedTargets[target].title
-
-          else
-            li.dropdown
-              a.dropdown-toggle(href='##{target}', data-toggle='dropdown')
-                span= namedTargets[target].title
-                span &nbsp;
-                span.caret
-
-              ul.dropdown-menu
-                each _code, client in code
-                  li: a(href='##{target}-#{client}', data-toggle='tab') #[i.fa.fa-check] #[= namedTargets[target].clients[client].title]
+          li: a(href='##{code.safe}', data-toggle='tab')= target
 
       div.btn-dropdown.dropdown.hidden.pull-right
         button.btn.btn-default.dropdown-toggle(type="button", data-toggle="dropdown"): i.fa.fa-bars
 
         ul.dropdown-menu
           each code, target in output
-            - var clients = (typeof code === 'string') ? false : Object.keys(code)
-
-            if (!clients)
-              li: a.hidden(href='##{target}', data-toggle='tab') #[i.fa.fa-check] #[= namedTargets[target].title]
-
-            else if (clients.length === 1)
-              li: a.hidden(href='##{target}-#{clients[0]}', data-toggle='tab') #[i.fa.fa-check] #[= namedTargets[target].title]
-
-            else
-              li.dropdown-header.hidden(data-clients= '#' + target + '-' + Object.keys(code).join(',#' + target + '-'))= namedTargets[target].title
-
-              each _code, client in code
-                li: a.hidden(href='##{target}-#{client}', data-toggle='tab') #[i.fa.fa-check] #[= namedTargets[target].clients[client].title]
+              li: a.hidden(href='##{code.safe}', data-toggle='tab') #[i.fa.fa-check] #[= target]
 
     div.tab-content
       each code, target in output
-        if (typeof code === 'string')
-          div.tab-pane(id= target).fade
+        if (typeof code.src === 'string')
+          div.tab-pane(id= code.safe).fade
             button(class='btn btn-default btn-xs btn-clipboard', data-clipboard-target='#{target}-code') #[i.fa.fa-copy] #[span Copy to Clipboard]
-            pre: code(id='#{target}-code', class= namedTargets[target].extname.replace('.', ''))= code
+            pre: code(id='#{code.safe}-code', class= target.replace('.', ''))= code.src
 
-        else
-          each _code, _target in code
-            div.tab-pane(id='#{target}-#{_target}').fade
-              button(class='btn btn-default btn-xs btn-clipboard', data-clipboard-target='#{target}-#{_target}-code') #[i.fa.fa-copy] #[span Copy to Clipboard]
-              pre: code(id='#{target}-#{_target}-code', class= namedTargets[target].extname.replace('.', ''))= _code
-
-    footer Powered by #[a(href="https://apiembed.com/", target="_blank") APIembed]
+    footer Powered by #[a(href="https://apiembed.com/", target="_blank") GISTembed]
 
 block scripts
   script(type='text/javascript').
